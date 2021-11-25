@@ -100,6 +100,63 @@ void drawInputs(char * grid, int * inputs, int input_size){
     }
 }
 
+// Perceptron functions
+
+double activation(double x){
+    //Sigmoid
+    return 1 / (1 + exp(-1 * x));
+}
+
+double percThink(double * weights, int weights_size, double bias, int * inputs){
+    //inputs = {x,y,category} 
+    double res = bias;
+    
+    int i;
+    for (i = 0; i < weights_size; i++){
+        res += inputs[i] * weights[i];
+    }
+
+    return activation(res);    
+}
+
+void percTrain(double * weights, int weights_size, double *bias, double l_rate, int * inputs, int inputs_size){
+    int i, j;
+    int single_input[3];
+    double output;
+    for(i = 0; i < inputs_size; i++){
+        single_input[0] = inputs[3 * i + 0];
+        single_input[1] = inputs[3 * i + 1];
+        single_input[2] = inputs[3 * i + 2];
+
+        output = percThink(weights, weights_size, *bias, single_input);
+
+        for (j = 0; j < weights_size; j++){
+            weights[j] += (single_input[2] - output) * l_rate * single_input[j];
+        }
+
+        *bias += (single_input[2] - output) * l_rate;
+    }
+}
+
+double function(int x, double * weights, double bias){
+    double m = -1 * (bias / weights[1]) / (bias / weights[0]);
+    double c = -1 * bias / weights[1];
+    
+    return m * x + c;
+}
+
+void drawFunction(char * grid, double * weights, double bias){
+    int x, y;
+    for (x = 0; x < WIDTH; x++){
+        y = function(x, weights, bias);
+        y = floor(y);
+
+        if (y < HEIGHT && y >= 0) grid[WIDTH * y + x] = '#';
+    }
+}
+
+//Accuracy function
+
 int main(){
 
     return 0;
