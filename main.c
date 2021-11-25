@@ -158,6 +158,63 @@ void drawFunction(char * grid, double * weights, double bias){
 //Accuracy function
 
 int main(){
+char grid[HEIGHT * WIDTH];
+    
+    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 
+    int x, y, category, i;
+
+    srand(time(NULL));
+
+    const int weight_size = 2;
+    double weights[weight_size] = {0.6 , 0.4};
+    double bias = 0.5;
+    double epochs = 50;
+    double l_rate = 1;
+    
+    const int input_size = 4;
+    int inputs[input_size * 3] = {10, 10, 0, 20, 20, 1, 5, 5, 0, 30 ,30, 1}; 
+
+    for (i = 0; i < input_size; i++){
+        grid[WIDTH * inputs[3 * i + 0] + inputs[3 * i + 1]] = '#';
+    }
+
+    clearGrid(grid, '.');
+
+    /*
+    printf("Enter input coordinates [x y category(0 or 1)]: ");
+    for (i = 0; i < input_size; i++){
+        scanf("%d %d %d", &x, &y, &category);
+        inputs[3 * i + 0] = x;
+        inputs[3 * i + 1] = y;
+        inputs[3 * i + 2] = category;
+
+        printf("x:%d, y:%d => %d\n\n", x, y, category);
+
+        grid[WIDTH * y + x] = category + '0';
+    }*/
+
+
+    printf("Weights before training: \n>%f >%lf\n", weights[0], weights[1]);
+    printf("Bias: \n>%lf\n", bias);
+
+    printf("\nTraining starts...\n");
+    for (i = 1; i <= epochs; i++){
+        percTrain(weights, weight_size, &bias, l_rate, inputs, input_size);
+    }
+    printf("%d Epochs done\n\n", epochs);
+
+    printf("Training completed\n");
+
+    printf("\nTrained weights: \n>%lf >%lf\n", weights[0], weights[1]);
+    printf("Bias: \n>%lf\n", bias);
+
+
+    drawFunction(grid, weights, bias);
+    drawInputs(grid, inputs, input_size);
+
+    renderGrid(grid, console);
+
+    setColor(console, 0);
     return 0;
 }
