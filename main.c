@@ -209,7 +209,6 @@ char grid[HEIGHT * WIDTH];
     printf("\nTrained weights: \n>%lf >%lf\n", weights[0], weights[1]);
     printf("Bias: \n>%lf\n", bias);
 
-
     drawFunction(grid, weights, bias);
     drawInputs(grid, inputs, input_size);
 
